@@ -1,5 +1,5 @@
-const User = require('./User');
-const Scooter = require('./Scooter');
+const User = require("./User");
+const Scooter = require("./Scooter");
 
 class ScooterApp {
 	constructor() {
@@ -34,6 +34,7 @@ class ScooterApp {
 		}
 
 		user.login(password);
+		console.log(`${username} has logged in`)
 	}
 
 	logoutUser(username) {
@@ -44,6 +45,7 @@ class ScooterApp {
 		}
 
 		user.logout();
+		console.log(`${username} has logged out`);
 	}
 
 	createScooter(station) {
@@ -61,11 +63,15 @@ class ScooterApp {
 			throw new Error(`${station} doesn't exist`);
 		}
 
-		if (this.stations[station].includes(scooter)) {
+		if (scooter.station === station) {
 			throw new Error("Scooter is already at the station");
+		} else if (scooter.station) {
+			throw new Error(`Scooter is already docked at another station: ${scooter.station}`);
 		}
 
-		this.stations[station].push(newScooter);
+		scooter.dock(station);
+
+		this.stations[station].push(scooter);
 		console.log(`Scooter is docked at ${station}`);
 	}
 
@@ -78,10 +84,10 @@ class ScooterApp {
 				if (scooter.user === null) {
 					stationScooters.splice(scooterIndex, 1);
 					scooter.rent(user);
-					console.log(`${user.username} has rented a scooter from ${station}`)
+					console.log(`${user.username} has rented a scooter from ${station}`);
 					return;
 				} else {
-					throw new Error(`Scooter already rented by ${scooter.user.username}`)
+					throw new Error(`Scooter already rented by ${scooter.user.username}`);
 				}
 			}
 		}
@@ -94,7 +100,7 @@ class ScooterApp {
 			console.log(`Username: ${username}`);
 		}
 
-		console.log("Scooter Stations:");
+		console.log("\nScooter Stations:");
 
 		for (const station in this.stations) {
 			console.log(`${station}: ${this.stations[station].length} scooters`);

@@ -7,12 +7,12 @@ class User {
 	}
 
 	login(password) {
-		if (this.password === password) {
-			this.loggedIn = true;
-			console.log(`${this.username} is logged in`);
-		} else {
+		if (this.password !== password) {
 			throw new Error("Incorrect password");
 		}
+
+		this.loggedIn = true;
+		console.log(`${this.username} is logged in`);
 	}
 
 	logout() {

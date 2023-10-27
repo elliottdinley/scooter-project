@@ -6,26 +6,30 @@ class Scooter {
 		this.user = null;
 		this.serial = Scooter.nextSerial;
 		Scooter.nextSerial++;
-		this.charge = 100;
+		this.charge = 80;
 		this.isBroken = false;
 	}
 
 	rent(user) {
-		if (this.charge > 20 && !this.isBroken) {
-			this.station = null;
-			this.user = user;
-		} else {
+		if (this.user) {
+			throw new Error("Scooter already rented")
+		}
+		if (this.charge <= 20 || this.isBroken) {
 			throw new Error(
 				this.isBroken
 					? "Scooter needs repair"
 					: "Scooter needs charge"
 			);
 		}
+
+		this.station = null;
+		this.user = user;
 	}
 
 	dock(station) {
 		this.station = station;
 		this.user = null;
+		console.log(`Scooter is docked at ${station}`);
 	}
 
 	// recharge() {
@@ -41,7 +45,7 @@ class Scooter {
 	// }
 
 	async recharge() {
-		console.log('Starting charge');
+		console.log("Starting charge");
 
 		const chargePerSecond = 10;
 		const interval = 1000;
@@ -57,7 +61,7 @@ class Scooter {
 			await new Promise(resolve => setTimeout(resolve, interval));
 		}
 
-		console.log('Charge complete');
+		console.log("Charge complete");
 	}
 
 	requestRepair() {
